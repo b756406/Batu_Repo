@@ -4,7 +4,7 @@ import urllib2
 from datetime import datetime
 
 str1 = "EN"
-_input_name = 0
+_input_name = 0asdasd
 _input_pre = 1
 _input_lat = 4
 _input_lng = 5
