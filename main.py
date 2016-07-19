@@ -29,6 +29,14 @@ def write_to_csv(total):
     output.close()
 
 
+def calculate_day_offset(row_time):
+    curr_time = datetime.now().date().day
+    dy_ffst = datetime.fromtimestamp(row_time).strftime('%d')
+    dt = int(dy_ffst)
+    dyffst = (dt - curr_time)
+    return dyffst
+
+
 def main():
     input_file = open("input.csv", "r")
     reader = csv.reader(input_file, delimiter=";")
@@ -42,10 +50,7 @@ def main():
         elv = row[_input_elv]
         for row1 in dataset:
             tdata = datetime.fromtimestamp(row1.get("time"))
-            curr_time = datetime.now().date().day
-            dy_ffst = datetime.fromtimestamp(row1.get("time")).strftime('%d')
-            dt = int(dy_ffst)
-            dyffst = (dt - curr_time)
+            dyffst = calculate_day_offset(row1.get("time"))
             wndspd = row1.get("windSpeed")
             wnddrctn = row1.get("windBearing")
             temp = row1.get("temperature")
