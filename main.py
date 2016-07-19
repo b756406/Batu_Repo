@@ -30,10 +30,20 @@ def write_to_csv(total):
 
 
 def calculate_day_offset(row_time):
+    """currtime = datetime.now().date().day
+    curr_time = datetime.strptime(str(currtime), "%d")
+    dy_fsst = datetime.fromtimestamp(row_time).strftime('%d')
+    dt = datetime.strptime(dy_fsst, "%d")
+    dayffst = (curr_time - dt)
+    dyffst = datetime.strptime(str(dayffst), "%d")"""
     curr_time = datetime.now().date().day
-    dy_ffst = datetime.fromtimestamp(row_time).strftime('%d')
-    dt = int(dy_ffst)
-    dyffst = (dt - curr_time)
+    dy_ffst = datetime.fromtimestamp(row_time).day
+    #dt = int(dy_ffst)#datetime.strptime(dy_ffst, "%d")
+    if curr_time > dy_ffst:
+        dyffst = (curr_time - dy_ffst)
+    else:
+        dyffst = (dy_ffst - curr_time)
+    #dyffst = datetime.strptime(str(dayffst), "%s")
     return dyffst
 
 
@@ -54,7 +64,7 @@ def main():
             wndspd = row1.get("windSpeed")
             wnddrctn = row1.get("windBearing")
             temp = row1.get("temperature")
-            total_list.append([name, str1, dyffst, tdata, wndspd, wnddrctn, temp, lat, lng, elv])
+            total_list.append([name, str1, tdata, dyffst, wndspd, wnddrctn, temp, lat, lng, elv])
     print total_list
     write_to_csv(total_list)
     input_file.close()
