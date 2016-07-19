@@ -17,17 +17,8 @@ _base_url = 'https://api.forecast.io/forecast/'
 def get_forecast(lat, lng):
     url = _base_url + _api_key + '/' + lat + ',' + lng
     data = json.load(urllib2.urlopen(url))
-    return data
-
-
-
-"""def day_offset(dyffst):
-    curr_time = datetime.now().date().day
-    dy_ffst = datetime.fromtimestamp(data.get("currently").get("time")).strftime('%d')
-    dt = datetime.strptime(dy_ffst)
-    dyffst = (curr_time - dt)
-    return dyffst"""
-
+    dataset = data.get("hourly").get("data")
+    return dataset
 
 
 def write_to_csv(total):
@@ -44,22 +35,21 @@ def main():
     total_list = []
 
     for row in reader:
+        dataset = get_forecast(row[_input_lat], row[_input_lng])
         name = row[_input_name]
-        data = get_forecast(row[_input_lat], row[_input_lng])
-        tdata = datetime.fromtimestamp(data.get("currently").get("time")).strftime('%c')
-        curr_time = datetime.now().date().day
-        dy_ffst = datetime.fromtimestamp(data.get("currently").get("time")).strftime('%d')
-        #dt = datetime.strptime(dy_ffst, '18')
-        dt = int(dy_ffst)
-        dyffst = (curr_time - dt)
-        #print dyffst
-        wndspd = data.get("currently").get("windSpeed")
-        wnddrctn = data.get("currently").get("windBearing")
-        temp = data.get("currently").get("temperature")
         lat = row[_input_lat]
         lng = row[_input_lng]
         elv = row[_input_elv]
-        total_list.append([name, str1, dyffst, tdata, wndspd, wnddrctn, temp, lat, lng, elv])
+        for row1 in dataset:
+            tdata = datetime.fromtimestamp(row1.get("time"))
+            curr_time = datetime.now().date().day
+            dy_ffst = datetime.fromtimestamp(row1.get("time")).strftime('%d')
+            dt = int(dy_ffst)
+            dyffst = (dt - curr_time)
+            wndspd = row1.get("windSpeed")
+            wnddrctn = row1.get("windBearing")
+            temp = row1.get("temperature")
+            total_list.append([name, str1, dyffst, tdata, wndspd, wnddrctn, temp, lat, lng, elv])
     print total_list
     write_to_csv(total_list)
     input_file.close()
