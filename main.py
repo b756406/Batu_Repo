@@ -37,6 +37,9 @@ def calculate_day_offset(row_time):
         dyffst = (curr_time - dy_ffst)
     else:
         dyffst = (dy_ffst - curr_time)
+
+    if dyffst > 7:
+        dyffst %= 7
     return dyffst
 
 
