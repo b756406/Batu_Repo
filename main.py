@@ -30,17 +30,10 @@ def write_to_csv(total):
 
 
 def calculate_day_offset(row_time):
-
-    curr_time = datetime.now().date().day
-    dy_ffst = datetime.fromtimestamp(row_time).day
-    if curr_time > dy_ffst:
-        dyffst = (curr_time - dy_ffst)
-    else:
-        dyffst = (dy_ffst - curr_time)
-
-    if dyffst > 7:
-        dyffst %= 7
-    return dyffst
+    row_time_as_datetime = datetime.fromtimestamp(row_time)
+    current_time = datetime.now()
+    delta = row_time_as_datetime.date() - current_time.date()
+    return delta.days
 
 
 def main():
