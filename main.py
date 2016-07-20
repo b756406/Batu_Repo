@@ -20,17 +20,9 @@ def get_forecast(lat, lng):
     dataset = data.get("hourly").get("data")
     return dataset
 
-def getfilename():
-    file_name1 = str(datetime.now().date().year)
-    file_name2 = str(datetime.now().date().month)
-    file_name3 = str(datetime.now().date().day)
-    file_name = file_name1 + file_name2 + file_name3
-    return file_name
-
 
 def write_to_csv(total):
-    filename = getfilename()
-    output = open("fio_" + filename + "_hourly.csv", "w")
+    output = open("file.csv", "w")
     writer = csv.writer(output, delimiter=';')
     for row in total:
         writer.writerow(row)
@@ -60,7 +52,7 @@ def main():
             tdata = datetime.fromtimestamp(row1.get("time"))
             dyffst = calculate_day_offset(row1.get("time"))
             wndspd = row1.get("windSpeed")
-            wnddrctn = (row1.get("windBearing") + 180) % 360
+            wnddrctn = row1.get("windBearing") + 180
             temp = row1.get("temperature")
             total_list.append([name, str1, tdata, dyffst, wndspd, wnddrctn, temp, code, lat, lng, elv])
     print total_list
