@@ -41,8 +41,8 @@
     }
   </style>
 </head>
-{% block body %}
 <body>
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -54,31 +54,26 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Home</a></li>
+        <li class="active"><a href="/homepage">Home</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/projects">Projects</a></li>
 
       </ul>
       <ul class="nav navbar-nav navbar-right">
           <li><a href="/register"><span class = "glyphicon glyphicon-sign-up"></span>Sign Up!</a></li>
-          <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
       </ul>
     </div>
   </div>
 </nav>
-<div class="container">
-    <br>
-    <h4>Please Login: </h4>
-    <br>
-    <form action="" class="form-inline" method="post">
-        <input type="text" class="form-control" placeholder="username"
-               name="username" value="{{ request.form.username }}">
-        <input type="password" class="form-control" placeholder="password"
-               name="password" value="{{ request.form.password }}">
-        <input class="btn btn-default" type="submit" value="Login">
-    </form>
-    <p>{{ error }}</p>
+
+<div class="container-fluid text-center">
+    <div class="col-sm-8 text-left">
+      <h1>About Us</h1>
+      <p>ErikTronik is your reliable partner who supports your projects in Turkey and EMEA region with its reputable history and references. We are in your service for all kind of consultancy, engineering, sales and after sales operations with our local knowledge and global business mindset. ErikTronik also tries to find solutions for big challenges like climate change, food and business intelligence with its capable engineering workforce.</p>
+      <hr>
+    </div>
+  </div>
 </div>
 </body>
-{% endblock %}
 </html>

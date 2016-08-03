@@ -41,8 +41,8 @@
     }
   </style>
 </head>
-{% block body %}
 <body>
+
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -54,31 +54,32 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Home</a></li>
+        <li class="active"><a href="/homepage">Home</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/projects">Projects</a></li>
 
       </ul>
       <ul class="nav navbar-nav navbar-right">
           <li><a href="/register"><span class = "glyphicon glyphicon-sign-up"></span>Sign Up!</a></li>
-          <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
       </ul>
     </div>
   </div>
 </nav>
-<div class="container">
-    <br>
-    <h4>Please Login: </h4>
-    <br>
-    <form action="" class="form-inline" method="post">
-        <input type="text" class="form-control" placeholder="username"
-               name="username" value="{{ request.form.username }}">
-        <input type="password" class="form-control" placeholder="password"
-               name="password" value="{{ request.form.password }}">
-        <input class="btn btn-default" type="submit" value="Login">
-    </form>
-    <p>{{ error }}</p>
+
+<div class="container-fluid text-center">
+    <div class="col-sm-8 text-left">
+      <h1>Our Projects</h1>
+        <a href="http://www.eriktronik.com/wp/projeler/?portfolio=salter-konteynir-3&lang=en">Shelter-Conteiner</a>
+        <br>
+        <a href="http://www.eriktronik.com/wp/?portfolio=rapcon-2&lang=en">RAPCON</a>
+        <br>
+        <a href="http://www.eriktronik.com/wp/?portfolio=mobil-vor&lang=en">Mobile VOR</a>
+        <br>
+        <a href="http://www.eriktronik.com/wp/?portfolio=yildirim-tespit-sistemi-3&lang=en">Lightning Detection and Tracking</a>
+      <hr>
+    </div>
+  </div>
 </div>
 </body>
-{% endblock %}
 </html>
