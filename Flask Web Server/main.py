@@ -11,6 +11,7 @@ from database import db
 from functools import wraps
 import json
 import urllib2
+from json import dumps
 
 
 app = Flask(__name__)
@@ -33,10 +34,23 @@ def login_required(f):
     return wrap
 
 
+def database_values():
+    list = []
+    users = User.query.all()
+    for user in users:
+        list.append(user.username)
+        list.append(user.password)
+        list.append(user.email)
+        list.append(user.apikey)
+        list.append(user.count)
+        list.append('\n')
+    print list
+    return json.dumps(list)
+
+
 def get_forecast(lat, lng):
     url = _base_url + _api_key + '/' + lat + ',' + lng + '?units=si'
     data = json.load(urllib2.urlopen(url))
-    # dataset = data.get("hourly").get("data")
     return data
 
 
@@ -109,36 +123,65 @@ def logout():
 def homepage():
     username = session['username']
     user = User.query.filter_by(username=username).first()
-    count = user.count
-    api_key = user.apikey
     _LAT=39.909462
     _LNG=32.767071
+    # api_key = generate_key()
     if user:
         print user.count
     if request.method == 'POST':
         if int(user.count) == 0:
             error = "You can't send any more requests. Please try premium version."
-            return render_template('/homepage.html', error=error)
+            return render_template('/homepage.html', error=error, url=custom_url)
         else:
             lat = request.form['latitude']
             lng = request.form['longitude']
             if lat != '' and lng != '':
-                custom_url = "/data?key={0}&lat={1}&lng={2}".format(api_key, lat, lng)
-                return render_template('/homepage.html', url=custom_url, count=count)
+                custom_url = "/data?key={0}&lat={1}&lng={2}".format(user.apikey, lat, lng)
+                return render_template('/homepage.html', url=custom_url, count=user.count)
             else:
                 error = "Empty fields."
                 return render_template('homepage.html', error=error)
     else:
-        custom_url = "/data?key={0}&lat={1}&lng={2}".format(api_key, _LAT, _LNG)
-        return render_template('/homepage.html', url=custom_url, count=count)
+        custom_url = "/data?key={0}&lat={1}&lng={2}".format(user.apikey, _LAT, _LNG)
+        return render_template('/homepage.html', url=custom_url, count=user.count)
 
 
-@app.route("/admin")
+@app.route("/admin", methods=['GET', 'POST'])
 def admin():
-    users = User.query.all()
-    for user in users:
-        print user.username
-    return render_template('admin.html', user=user)
+    jsonarray = database_values()
+    """
+        if request.form['id'] == '' :
+            print "test"
+            User.query.filter_by(username=request.form['username']).update(count=request.form['count'])
+            db.session.commit()
+            print "Committed"
+            return redirect(url_for('admin'))
+        else:
+            User.query.filter_by(id=request.form['id']).delete()
+            db.session.commit()
+            print "Deleted"
+            return redirect(url_for('admin'))
+    return render_template('admin.html', jsonarray=jsonarray)
+    """
+    return render_template('admin.html', jsonarray=jsonarray)
+
+
+@app.route("/admin/change_credit", methods=['POST'])
+def change_credit():
+    if request.method == 'POST':
+        db.session.query(User).filter_by(username=request.form['username']).update({"count": request.form['count']})
+        db.session.commit()
+        # print "Committed"
+        return redirect(url_for('admin'))
+
+
+@app.route("/admin/delete_user", methods=['POST'])
+def delete_user():
+    if request.method == 'POST':
+        User.query.filter_by(id=request.form['id']).delete()
+        db.session.commit()
+        print "Deleted"
+        return redirect(url_for('admin'))
 
 
 @app.route("/about")
@@ -177,8 +220,7 @@ def register_page():
                 db.session.commit()
                 User.query.all()
                 print "Kullanici kaydedildi."
-                session['logged_in'] = True
-                return redirect('homepage')
+                return redirect(url_for('login_page'))
             except IntegrityError:
                 print "Kullanici zaten kayitli"
     except Exception as e:

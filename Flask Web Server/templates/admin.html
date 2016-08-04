@@ -70,10 +70,48 @@
 <div class="container-fluid text-center">
     <div class="col-sm-8 text-left">
         <hr>
-        {{ user }}
+        {{ jsonarray }}
     </div>
   </div>
 </div>
+
+    <div class="row">
+            <div class="span10">
+                <div id="intro_alert" class="alert alert-info">
+                    <div class="container">
+                        <br>
+                        <h4>Please Enter the id and credit value : </h4>
+                        <br>
+                        <form action="/admin/change_credit" class="form-inline" method="post">
+                            <input type="text" class="form-control" placeholder="username"
+                                name="username" value="{{ request.form.username }}">
+                             <input type="text" class="form-control" placeholder="count"
+                                name="count" value="{{ request.form.count }}">
+                            <input class="btn btn-default" type="submit" value="Change">
+                        </form>
+                        <p>{{ error }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span10">
+                <div id="intro_alert" class="alert alert-info">
+                    <div class="container">
+                        <br>
+                        <h4>Please Enter the User You Wanna Delete : </h4>
+                        <br>
+                        <form action="/admin/delete_user" class="form-inline" method="post">
+                            <input type="text" class="form-control" placeholder="user_id"
+                                name="id" value="{{ request.form.id }}">
+                            <input class="btn btn-default" type="submit" value="Delete">
+                        </form>
+                        <p>{{ error }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </body>
 </html>
 {% endblock %}
