@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" method="POST">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Odds Home', 'Odds Draw', 'Odds Away'],
+            {% for i in range(0, param|length) %}
+               ['{{ param[i] }}', {{ param1[i] }}, {{ param2[i] }}, {{ param3[i] }} ],
+            {% endfor %}
+        ['Deneme', 2.4, 3.2 , 2.4]
+        ]);
+
+        var options = {
+          title: 'Odd Chart',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+</head>
+<body>
+
+<form action="{{ url_for('stat_func') }}" method="POST">
+
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+    <select name="bookmaker">
+     {% for i in bookMaker %}
+         <option value=" {{ i }} ">{{ i }}</option>
+     {% endfor %}
+    </select>
+    <select name="matchID">
+     {% for i in query %}
+         <option value=" {{ i }} ">{{ i }}</option>
+     {% endfor %}
+    </select>
+    <input type="submit" value="Submit"><br>
+
+ <!--   <p>     {% for i in range(0, param|length) %}
+               ['{{ param[i] }}', {{ param1[i] }}, {{ param2[i] }}, {{ param3[i] }} ],
+            {% endfor %}
+    ['Deneme', 2.4, 3.2 , 4.2]
+    </p>-->
+</form>
+<!--
+<select name="hometeam">
+     {% for j in liste %}
+         <option value=" {{ j }} ">{{ j }}</option>
+     {% endfor %}
+</select>
+-->
+<div id="curve_chart" style="width: 1800px; height: 800px"></div>
+
+    <h1>Best Odd in Home is: {{ maxHome }}</h1>
+    <h1>Best Odd in Draw is: {{ maxDraw }}</h1>
+    <h1>Best Odd in Away is: {{ maxAway }}</h1>
+
+</body>
+</html>
