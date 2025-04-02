@@ -7,7 +7,7 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-    environment: Production
+    environment: production
     steps:
       - name: Run a one-line script
         run: echo Hello, world!
